@@ -7,18 +7,27 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "lint": "eslint src --ext .js,.vue --fix",
+    "format": "prettier --write src/"
   },
   "dependencies": {
-    "@mdui/icons": "^1.0.3",
     "@tauri-apps/api": "^2",
     "@tauri-apps/plugin-opener": "^2",
     "mdui": "^2.1.4",
     "vue": "^3.5.13"
   },
   "devDependencies": {
+    "@rushstack/eslint-patch": "^1.15.0",
     "@tauri-apps/cli": "^2",
     "@vitejs/plugin-vue": "^5.2.1",
-    "vite": "^6.0.3"
+    "@vitest/ui": "^4.0.9",
+    "@vue/test-utils": "^2.4.6",
+    "eslint": "^9.39.1",
+    "jsdom": "^27.2.0",
+    "prettier": "^3.6.2",
+    "vite": "^6.0.3",
+    "vite-plugin-compression2": "^2.3.1",
+    "vitest": "^4.0.9"
   }
 }

@@ -1,34 +1,50 @@
 <script setup>
-import { ref, computed } from 'vue'
-import Note from './Note.vue'
-import Event from './Event.vue'
-import Me from './Me.vue'
+import { ref, computed, onUnmounted } from 'vue'
+import { LazyNote, LazyEvent, LazyMe } from './components/LazyComponents.js'
 
+// 初始化路由
 const routes = {
-  '/note': Note,
-  '/event': Event,
-  '/me': Me
+  '/note': LazyNote,
+  '/event': LazyEvent,
+  '/me': LazyMe
 }
-const currentPath = ref(window.location.hash)
-window.addEventListener('hashchange', () => {
-  currentPath.value = window.location.hash
-})
+
+const currentPath = ref(window.location.hash || '#/note')
+
+// 监听hash变化
+const handleHashChange = () => {
+  // 确保路径有效
+  const hash = window.location.hash || '#/note';
+  currentPath.value = hash;
+}
+
+window.addEventListener('hashchange', handleHashChange)
+
+// 计算当前显示的组件
 const currentView = computed(() => {
-  return routes[currentPath.value.slice(1) || '/note'] || Note
+  const path = currentPath.value.slice(1) || '/note';
+  return routes[path] || LazyNote;
+})
+
+// 清理事件监听器
+onUnmounted(() => {
+  window.removeEventListener('hashchange', handleHashChange)
 })
 </script>
+
 <template>
   <div class="app-wrapper">
     <div class="app-container">
       <component :is="currentView"></component>
     </div>
     <mdui-navigation-bar value="item-1" style="position: fixed; bottom: 0; left: 0; right: 0;">
-      <mdui-navigation-bar-item icon="notes" value="item-1" href="#/note">记</mdui-navigation-bar-item>
-      <mdui-navigation-bar-item icon="event_note" value="item-2" href="#/event">事</mdui-navigation-bar-item>
-      <mdui-navigation-bar-item icon="people" value="item-3" href="#/me">私</mdui-navigation-bar-item>
+      <mdui-navigation-bar-item icon="notes" value="item-1" href="#/note">笔记</mdui-navigation-bar-item>
+      <mdui-navigation-bar-item icon="event_note" value="item-2" href="#/event">事件</mdui-navigation-bar-item>
+      <mdui-navigation-bar-item icon="people" value="item-3" href="#/me">我的</mdui-navigation-bar-item>
     </mdui-navigation-bar>
   </div>
 </template>
+
 <style>
 html,
 body {
@@ -53,7 +69,7 @@ body {
   max-width: 600px;
   box-sizing: border-box;
   padding: 20px;
-  padding-bottom: 145px;
+  padding-bottom: 0;
   padding-top: 72px;
   display: flex;
   flex-direction: column;

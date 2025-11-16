@@ -1,5 +1,6 @@
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
+import { compression } from 'vite-plugin-compression2';
 
 const host = process.env.TAURI_DEV_HOST;
 
@@ -14,6 +15,8 @@ export default defineConfig(async () => ({
         },
       },
     }),
+    // 添加压缩插件以减小包大小
+    compression()
   ],
 
   // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
@@ -37,4 +40,25 @@ export default defineConfig(async () => ({
       ignored: ["**/src-tauri/**"],
     },
   },
+
+  build: {
+    // 启用压缩以减小包大小
+    rollupOptions: {
+      output: {
+        // 代码分割配置
+        manualChunks: {
+          vue: ['vue'],
+          mdui: ['mdui'],
+        }
+      }
+    },
+    // 启用压缩
+    cssCodeSplit: true,
+    sourcemap: true, // 生产环境可设置为false以减小体积
+  },
+
+  // 优化依赖预构建
+  optimizeDeps: {
+    include: ['vue', 'mdui']
+  }
 }));
