@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "流记",
+  "productName": "StreamNote",
   "version": "0.1.0",
   "identifier": "com.soda.streamNote",
   "build": {
@@ -12,7 +12,7 @@
   "app": {
     "windows": [
       {
-        "title": "流记",
+        "title": "StreamNote",
         "width": 800,
         "height": 600
       }

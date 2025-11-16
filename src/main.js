@@ -1,4 +1,9 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 
-createApp(App).mount("#app");
+import 'mdui/mdui.css';
+import 'mdui';
+
+const app = createApp(App);
+app.config.compilerOptions.ignoredElements = [/^mdui-icon-.+$/];
+app.mount("#app");
