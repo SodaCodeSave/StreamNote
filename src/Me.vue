@@ -65,7 +65,7 @@ const resetAllData = () => {
 
             // 触发全局更新
             window.dispatchEvent(new CustomEvent('dataUpdate'));
-
+            
             alert('所有数据已重置');
         } catch (error) {
             console.error('重置数据失败:', error);
@@ -93,6 +93,66 @@ onUnmounted(() => {
     window.removeEventListener('storage', storageListener);
     window.removeEventListener('dataUpdate', updateStats);
 });
+
+// 导出笔记
+function exportNotes() {
+    try {
+        const storedNotes = localStorage.getItem('notes');
+        if (!storedNotes) {
+            alert('没有可导出的笔记');
+            return;
+        }
+
+        const notes = JSON.parse(storedNotes);
+        const blob = new Blob([JSON.stringify(notes, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'notes.json';
+        a.click();
+
+        URL.revokeObjectURL(url);
+    } catch (error) {
+        console.error('导出笔记失败:', error);
+        alert('导出笔记失败，请重试');
+    }
+}
+
+// 导入笔记
+function importNotes() {
+    try {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.json';
+        input.click();
+        input.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) {
+                alert('请选择一个 JSON 文件');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.readAsText(file, 'utf-8');
+            reader.onload = () => {
+                try {
+                    const importedNotes = JSON.parse(reader.result);
+                    localStorage.setItem('notes', JSON.stringify(importedNotes));
+                    alert('笔记导入成功');
+                    window.dispatchEvent(new CustomEvent('dataUpdate'));
+                } catch (error) {
+                    console.error('导入笔记失败:', error);
+                    alert('导入笔记失败，请检查文件格式');
+                }
+            };
+        });
+    }
+    finally {
+        input.removeEventListener('change', e);
+    }
+}
+
 </script>
 
 <template>
@@ -124,33 +184,24 @@ onUnmounted(() => {
 
         <mdui-card class="settings-card">
             <h3>身世设置</h3>
-            <mdui-text-field
-            style="margin-bottom: 10px;"
-                label="姓名"
-                v-model="userInfo.name"
-                @blur="saveUserInfo"
-                variant="outlined"
-            ></mdui-text-field>
-            <mdui-text-field
-                label="简介"
-                v-model="userInfo.bio"
-                type="textarea"
-                rows="2"
-                @blur="saveUserInfo"
-                variant="outlined"
-            ></mdui-text-field>
+            <mdui-text-field style="margin-bottom: 10px;" label="姓名" v-model="userInfo.name" @blur="saveUserInfo"
+                variant="outlined"></mdui-text-field>
+            <mdui-text-field label="简介" v-model="userInfo.bio" type="textarea" rows="2" @blur="saveUserInfo"
+                variant="outlined"></mdui-text-field>
             <div class="join-date">入会之日: {{ userInfo.joinDate }}</div>
         </mdui-card>
 
         <mdui-card class="danger-zone">
             <h3>禁地</h3>
             <p>复归初始将删去所有笔记与事件，此乃不可逆之操作也。</p>
-            <mdui-button
-                variant="tonal"
-                color="error"
-                @click="resetAllData"
-            >
+            <mdui-button variant="tonal" color="error" @click="resetAllData">
                 复归初始
+            </mdui-button>
+            <mdui-button variant="tonal" color="error" @click="exportNotes">
+                导出笔记
+            </mdui-button>
+            <mdui-button variant="tonal" color="error" @click="importNotes">
+                导入笔记
             </mdui-button>
         </mdui-card>
     </div>
