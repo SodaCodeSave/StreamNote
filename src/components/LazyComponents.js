@@ -14,3 +14,8 @@ export const LazyEvent = defineAsyncComponent(() =>
 export const LazyMe = defineAsyncComponent(() =>
   import('../Me.vue')
 );
+
+// 懒加载AI组件
+export const LazyAI = defineAsyncComponent(() =>
+  import('../AI.vue')
+);

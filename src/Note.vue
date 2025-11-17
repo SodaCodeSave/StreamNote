@@ -48,6 +48,12 @@ const addNote = () => {
   width: calc(100% - 40px);
   max-width: 600px;
   box-sizing: border-box;
+  transition: bottom 0.5s ease;
+}
+
+#note-input:focus {
+  z-index: 1000;
+  bottom: calc(50% + env(safe-area-inset-bottom, 0px));
 }
 
 #note-content {

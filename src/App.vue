@@ -1,11 +1,12 @@
 <script setup>
 import { ref, computed, onUnmounted } from 'vue'
-import { LazyNote, LazyEvent, LazyMe } from './components/LazyComponents.js'
+import { LazyNote, LazyEvent, LazyMe, LazyAI } from './components/LazyComponents.js'
 
 // 初始化路由
 const routes = {
   '/note': LazyNote,
-  '/event': LazyEvent,
+  // '/event': LazyEvent,
+  '/ai': LazyAI,
   '/me': LazyMe
 }
 
@@ -39,7 +40,8 @@ onUnmounted(() => {
     </div>
     <mdui-navigation-bar value="item-1" style="position: fixed; bottom: 0; left: 0; right: 0;">
       <mdui-navigation-bar-item icon="notes" value="item-1" href="#/note">笔记</mdui-navigation-bar-item>
-      <mdui-navigation-bar-item icon="event_note" value="item-2" href="#/event">事件</mdui-navigation-bar-item>
+      <!-- <mdui-navigation-bar-item icon="event_note" value="item-2" href="#/event">事件</mdui-navigation-bar-item> -->
+      <mdui-navigation-bar-item icon="auto_awesome" value="item-2" href="#/ai">AI</mdui-navigation-bar-item>
       <mdui-navigation-bar-item icon="people" value="item-3" href="#/me">我的</mdui-navigation-bar-item>
     </mdui-navigation-bar>
   </div>
